@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Overlay Widget</title>
+
+<style>
+/* Overlay */
+#overlay {
+  width: 1800px;
+  height: 600px;
+  padding: 20px 20px 10px 20px;
+  background: #0a0f2c;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  border-radius: 20px;
+  box-shadow: 12px 12px 25px rgba(0,0,0,0.45);
+}
+
+/* HEADER */
+.subtitle {
+  text-align: center;
+  font-size: 50px;
+  margin-top: 1px;
+  font-weight: 900;
+  color: #8a5cff;
+}
+.purple-line {
+  border-top: 2px solid #8a5cff;
+  margin: 5px 0 10px 0;
+}
+
+/* TEAMS */
+.team-display {
+  text-align: center;
+  font-weight: 900;
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+/* MAP ROW */
+.maps-horizontal {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* MAP CONTAINER */
+.map-container {
+  width: 18%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* MAP BOX BIGGER */
+.map {
+  width: 100%;
+  height: 275px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+/* MAP TITLE */
+.map-title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.map-number {
+  font-size: 17px;
+  font-weight: 900;
+  margin-top: -10px;
+  color: #8a5cff;
+}
+.map-mode {
+  font-size: 20px;
+  margin-top: 5px;
+  font-weight: 900;
+}
+
+/* IMAGE */
+.map-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  object-position: center 20%;
+  display: none;
+  border-radius: 8px;
+  margin-top: 0px;
+}
+#mapImg2 { object-position: center 40%; }
+
+/* MAP NAME */
+.map-label {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15,20,50,0.95);
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #8a5cff;
+  display: none;
+  margin-bottom: -5px;
+}
+
+/* LIVE */
+.live-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #8a5cff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  display: none;
+}
+
+/* CONTROLS */
+.map-controls {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.map-controls select,
+.map-controls button,
+.team-inputs-bottom input,
+.team-inputs-bottom button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(138,92,255,0.7);
+  background: #0a0f2c;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* TEAM INPUT */
+.team-inputs-bottom {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* ADMIN BUTTON - centered below overlay */
+#adminToggle {
+  position: absolute;
+  top: 680px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  font-size: 14px;
+  background: #8a5cff;
+  color: white;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+/* HIDE CONTROLS */
+.admin-hidden .map-controls,
+.admin-hidden .team-inputs-bottom {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+<div id="overlay">
+
+  <div class="subtitle">TODAY'S MATCHUP</div>
+  <div class="purple-line"></div>
+
+  <div class="team-display" id="teamDisplay">TEAM A vs TEAM B</div>
+
+  <div class="maps-horizontal">
+    <!-- Repeat for 5 maps -->
+    <div class="map-container">
+      <div class="map" id="map1">
+        <div class="map-title">
+          <div class="map-number">MAP 1</div>
+          <div class="map-mode">HARDPOINT</div>
+        </div>
+        <img class="map-img" id="mapImg1">
+        <div class="map-label" id="label1"></div>
+        <div class="live-indicator">LIVE</div>
+      </div>
+      <div class="map-controls">
+        <select onchange="updateMap(1,this.value)">
+          <option value="">Select Map</option>
+          <option>Blackheart</option>
+          <option>Colossus</option>
+          <option>Den</option>
+          <option>Exposure</option>
+          <option>Raid</option>
+          <option>Scar</option>
+        </select>
+        <button onclick="toggleLive(1)">LIVE</button>
+      </div>
+    </div>
+
+    <!-- MAP 2 -->
+    <div class="map-container">
+      <div class="map" id="map2">
+        <div class="map-title">
+          <div class="map-number">MAP 2</div>
+          <div class="map-mode">SEARCH & DESTROY</div>
+        </div>
+        <img class="map-img" id="mapImg2">
+        <div class="map-label" id="label2"></div>
+        <div class="live-indicator">LIVE</div>
+      </div>
+      <div class="map-controls">
+        <select onchange="updateMap(2,this.value)">
+          <option value="">Select Map</option>
+          <option>Blackheart</option>
+          <option>Colossus</option>
+          <option>Den</option>
+          <option>Exposure</option>
+          <option>Raid</option>
+          <option>Scar</option>
+        </select>
+        <button onclick="toggleLive(2)">LIVE</button>
+      </div>
+    </div>
+
+    <!-- MAP 3 -->
+    <div class="map-container">
+      <div class="map" id="map3">
+        <div class="map-title">
+          <div class="map-number">MAP 3</div>
+          <div class="map-mode">OVERLOAD</div>
+        </div>
+        <img class="map-img" id="mapImg3">
+        <div class="map-label" id="label3"></div>
+        <div class="live-indicator">LIVE</div>
+      </div>
+      <div class="map-controls">
+        <select onchange="updateMap(3,this.value)">
+          <option value="">Select Map</option>
+          <option>Blackheart</option>
+          <option>Colossus</option>
+          <option>Den</option>
+          <option>Exposure</option>
+          <option>Raid</option>
+          <option>Scar</option>
+        </select>
+        <button onclick="toggleLive(3)">LIVE</button>
+      </div>
+    </div>
+
+    <!-- MAP 4 -->
+    <div class="map-container">
+      <div class="map" id="map4">
+        <div class="map-title">
+          <div class="map-number">MAP 4</div>
+          <div class="map-mode">HARDPOINT</div>
+        </div>
+        <img class="map-img" id="mapImg4">
+        <div class="map-label" id="label4"></div>
+        <div class="live-indicator">LIVE</div>
+      </div>
+      <div class="map-controls">
+        <select onchange="updateMap(4,this.value)">
+          <option value="">Select Map</option>
+          <option>Blackheart</option>
+          <option>Colossus</option>
+          <option>Den</option>
+          <option>Exposure</option>
+          <option>Raid</option>
+          <option>Scar</option>
+        </select>
+        <button onclick="toggleLive(4)">LIVE</button>
+      </div>
+    </div>
+
+    <!-- MAP 5 -->
+    <div class="map-container">
+      <div class="map" id="map5">
+        <div class="map-title">
+          <div class="map-number">MAP 5</div>
+          <div class="map-mode">SEARCH & DESTROY</div>
+        </div>
+        <img class="map-img" id="mapImg5">
+        <div class="map-label" id="label5"></div>
+        <div class="live-indicator">LIVE</div>
+      </div>
+      <div class="map-controls">
+        <select onchange="updateMap(5,this.value)">
+          <option value="">Select Map</option>
+          <option>Blackheart</option>
+          <option>Colossus</option>
+          <option>Den</option>
+          <option>Exposure</option>
+          <option>Raid</option>
+          <option>Scar</option>
+        </select>
+        <button onclick="toggleLive(5)">LIVE</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="team-inputs-bottom">
+    <input id="teamAInput" placeholder="Team A">
+    <input id="teamBInput" placeholder="Team B">
+    <button onclick="updateTeams()">Set Teams</button>
+  </div>
+
+</div>
+
+<button id="adminToggle" onclick="toggleAdmin()">ADMIN</button>
+
+
+let mapImages = {};
+
+// Fetch cloud data and refresh every 5 seconds
+async function fetchOverlayData() {
+  try {
+    const timestamp = new Date().getTime(); // cache-busting
+    const res = await fetch(`${cloudJSON}?t=${timestamp}`);
+    const data = await res.json();
+
+    // Update maps
+    mapImages = data.maps;
+
+    // Update teams
+    document.getElementById("teamDisplay").innerText = `${data.teams.teamA} vs ${data.teams.teamB}`;
+
+    // Refresh currently selected maps
+    for (let i = 1; i <= 5; i++) {
+      const select = document.querySelector(`#map${i} select`);
+      if (select.value) updateMap(i, select.value);
+    }
+
+  } catch(e) {
+    console.error("Error fetching overlay data:", e);
+  }
+}
+
+function updateMap(num, mapName) {
+  const img = document.getElementById("mapImg"+num);
+  const label = document.getElementById("label"+num);
+
+  if(mapName && mapImages[mapName]){
+    const timestamp = new Date().getTime(); // cache-busting
+    img.src = mapImages[mapName] + `?t=${timestamp}`;
+    img.style.display = "block";
+    label.innerText = mapName;
+    label.style.display = "block";
+  } else {
+    img.style.display = "none";
+    label.style.display = "none";
+  }
+}
+
+function toggleLive(num){
+  const live = document.querySelector("#map"+num+" .live-indicator");
+  live.style.display = (live.style.display === "none") ? "block" : "none";
+}
+
+function updateTeams(){
+  const a = document.getElementById("teamAInput").value || "TEAM A";
+  const b = document.getElementById("teamBInput").value || "TEAM B";
+  document.getElementById("teamDisplay").innerText = `${a} vs ${b}`;
+}
+
+function toggleAdmin(){
+  document.getElementById("overlay").classList.toggle("admin-hidden");
+}
+
+// Initial load and set interval
+fetchOverlayData();
+setInterval(fetchOverlayData, 5000);
+</script>
+<script>
+// ✅ Place map images here at the top of the script
+const mapImages = {
+  "Blackheart":"https://github.com/naeviicod/overlay/blob/main/Blackheart.jpg",
+  "Colossus":"https://github.com/naeviicod/overlay/blob/main/Colossus.jpg",
+  "Den":"https://github.com/naeviicod/overlay/blob/main/Den.jpg",
+  "Exposure":"https://github.com/naeviicod/overlay/blob/main/Exposure.jpg",
+  "Raid":"https://github.com/naeviicod/overlay/blob/main/Raid.jpg",
+  "Scar":"https://github.com/naeviicod/overlay/blob/main/Scar.jpg"
+};
+
+// Function to update map images
+function updateMap(num, mapName) {
+  const img = document.getElementById("mapImg"+num);
+  const label = document.getElementById("label"+num);
+
+  if(mapName && mapImages[mapName]){
+    img.src = mapImages[mapName];
+    img.style.display = "block";
+    label.innerText = mapName;
+    label.style.display = "block";
+  } else {
+    img.style.display = "none";
+    label.style.display = "none";
+  }
+}
+<script>
+
+</script>
+// Toggle live indicator
+function toggleLive(num){
+  const live = document.querySelector("#map"+num+" .live-indicator");
+  live.style.display = (live.style.display === "none") ? "block" : "none";
+}
+
+// Update team names
+function updateTeams(){
+  const a = document.getElementById("teamAInput").value || "TEAM A";
+  const b = document.getElementById("teamBInput").value || "TEAM B";
+  document.getElementById("teamDisplay").innerText = `${a} vs ${b}`;
+}
+
+// Admin toggle
+function toggleAdmin(){
+  document.getElementById("overlay").classList.toggle("admin-hidden");
+}
+</script>
+</body>
+</html>
