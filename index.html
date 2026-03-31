@@ -192,7 +192,8 @@ function updateMap(num, mapName) {
     label.style.display = "none";
   }
 }
-
+const cloudJSON = "https://naeviicod.github.io/Overlay-Matchup/overlay.json";
+  
 function toggleLive(num){
   const live = document.querySelector("#map"+num+" .live-indicator");
   live.style.display = (live.style.display === "none") ? "block" : "none";
@@ -208,28 +209,22 @@ function toggleAdmin(){
   document.getElementById("overlay").classList.toggle("admin-hidden");
 }
 
-const cloudJSON = "https://naeviicod.github.io/Overlay-Matchup/overlay.json";
-let overlayData = {};
-
 async function fetchOverlayData() {
   try {
     const timestamp = new Date().getTime(); // cache-busting
     const res = await fetch(`${cloudJSON}?t=${timestamp}`);
-    overlayData = await res.json();
+    const data = await res.json();
 
-    // Teams
-    document.getElementById("teamDisplay").innerText =
-      `${overlayData.teams.teamA} vs ${overlayData.teams.teamB}`;
+    document.getElementById("teamDisplay").innerText = `${data.teams.teamA} vs ${data.teams.teamB}`;
 
-    // Maps 1-5
     for (let i = 1; i <= 5; i++) {
-      const mapSlot = overlayData.maps[i];
+      const mapSlot = data.maps[i];
       const img = document.getElementById(`mapImg${i}`);
       const label = document.getElementById(`label${i}`);
       const live = document.querySelector(`#map${i} .live-indicator`);
 
-      if (mapSlot && overlayData.mapImages[mapSlot.name]) {
-        img.src = overlayData.mapImages[mapSlot.name] + `?t=${timestamp}`;
+      if (mapSlot && data.mapImages[mapSlot.name]) {
+        img.src = data.mapImages[mapSlot.name] + `?t=${timestamp}`;
         img.style.display = "block";
         label.innerText = mapSlot.name;
         label.style.display = "block";
@@ -240,14 +235,13 @@ async function fetchOverlayData() {
         live.style.display = "none";
       }
     }
-  } catch (err) {
-    console.error("Error fetching overlay JSON:", err);
+  } catch(e) {
+    console.error("Error fetching overlay JSON:", e);
   }
 }
 
-// Initial load + refresh every 5 seconds
 fetchOverlayData();
 setInterval(fetchOverlayData, 5000);
-
+</script>
 </body>
 </html>
