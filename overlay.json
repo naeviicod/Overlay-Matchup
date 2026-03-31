@@ -1,7 +1,7 @@
 {
   "teams": {
-    "teamA": "TEAM ALPHA",
-    "teamB": "TEAM BRAVO"
+    "teamA": "VYRE",
+    "teamB": "OpTic"
   },
   "maps": {
     "1": { "name": "Blackheart", "live": true },
