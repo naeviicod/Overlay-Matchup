@@ -4,31 +4,11 @@
     "teamB": "TEAM BRAVO"
   },
   "maps": {
-    "1": {
-      "name": "Colossus",
-      "mode": "HARDPOINT",
-      "live": true
-    },
-    "2": {
-      "name": "Blackheart",
-      "mode": "SEARCH & DESTROY",
-      "live": false
-    },
-    "3": {
-      "name": "Den",
-      "mode": "OVERLOAD",
-      "live": false
-    },
-    "4": {
-      "name": "Exposure",
-      "mode": "HARDPOINT",
-      "live": true
-    },
-    "5": {
-      "name": "Raid",
-      "mode": "SEARCH & DESTROY",
-      "live": false
-    }
+    "1": { "name": "Blackheart", "live": true },
+    "2": { "name": "Colossus", "live": false },
+    "3": { "name": "Den", "live": false },
+    "4": { "name": "Exposure", "live": false },
+    "5": { "name": "Raid", "live": false }
   },
   "mapImages": {
     "Blackheart": "https://naeviicod.github.io/Overlay-Matchup/images/Blackheart.jpg",
