@@ -208,7 +208,7 @@ function toggleAdmin(){
   document.getElementById("overlay").classList.toggle("admin-hidden");
 }
 
-  const cloudJSON = "https://raw.githubusercontent.com/naeviicod/Overlay-Matchup/main/overlay.json";
+const cloudJSON = "https://naeviicod.github.io/Overlay-Matchup/overlay.json";
 let overlayData = {};
 
 async function fetchOverlayData() {
@@ -217,11 +217,11 @@ async function fetchOverlayData() {
     const res = await fetch(`${cloudJSON}?t=${timestamp}`);
     overlayData = await res.json();
 
-    // Update team names
+    // Teams
     document.getElementById("teamDisplay").innerText =
       `${overlayData.teams.teamA} vs ${overlayData.teams.teamB}`;
 
-    // Update maps 1-5
+    // Maps 1-5
     for (let i = 1; i <= 5; i++) {
       const mapSlot = overlayData.maps[i];
       const img = document.getElementById(`mapImg${i}`);
@@ -229,7 +229,7 @@ async function fetchOverlayData() {
       const live = document.querySelector(`#map${i} .live-indicator`);
 
       if (mapSlot && overlayData.mapImages[mapSlot.name]) {
-        img.src = overlayData.mapImages[mapSlot.name];
+        img.src = overlayData.mapImages[mapSlot.name] + `?t=${timestamp}`;
         img.style.display = "block";
         label.innerText = mapSlot.name;
         label.style.display = "block";
@@ -245,10 +245,9 @@ async function fetchOverlayData() {
   }
 }
 
-// Initial fetch + repeat every 5 seconds
+// Initial load + refresh every 5 seconds
 fetchOverlayData();
 setInterval(fetchOverlayData, 5000);
-</script>
 
 </body>
 </html>
