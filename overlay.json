@@ -1,10 +1,10 @@
 {
   "teams": {
-    "teamA": "VYRE",
-    "teamB": "OpTic"
+    "teamA": "Team A",
+    "teamB": "Team B"
   },
   "maps": {
-    "1": { "name": "Blackheart", "live": true },
+    "1": { "name": "Blackheart", "live": false },
     "2": { "name": "Colossus", "live": false },
     "3": { "name": "Den", "live": false },
     "4": { "name": "Exposure", "live": false },
