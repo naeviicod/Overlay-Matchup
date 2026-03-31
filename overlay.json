@@ -1,0 +1,41 @@
+{
+  "teams": {
+    "teamA": "TEAM ALPHA",
+    "teamB": "TEAM BRAVO"
+  },
+  "maps": {
+    "1": {
+      "name": "Colossus",
+      "mode": "HARDPOINT",
+      "live": true
+    },
+    "2": {
+      "name": "Blackheart",
+      "mode": "SEARCH & DESTROY",
+      "live": false
+    },
+    "3": {
+      "name": "Den",
+      "mode": "OVERLOAD",
+      "live": false
+    },
+    "4": {
+      "name": "Exposure",
+      "mode": "HARDPOINT",
+      "live": true
+    },
+    "5": {
+      "name": "Raid",
+      "mode": "SEARCH & DESTROY",
+      "live": false
+    }
+  },
+  "mapImages": {
+    "Blackheart": "https://naeviicod.github.io/Overlay-Matchup/images/Blackheart.jpg",
+    "Colossus": "https://naeviicod.github.io/Overlay-Matchup/images/Colossus.jpg",
+    "Den": "https://naeviicod.github.io/Overlay-Matchup/images/Den.jpg",
+    "Exposure": "https://naeviicod.github.io/Overlay-Matchup/images/Exposure.jpg",
+    "Raid": "https://naeviicod.github.io/Overlay-Matchup/images/Raid.jpg",
+    "Scar": "https://naeviicod.github.io/Overlay-Matchup/images/Scar.jpg"
+  }
+}
